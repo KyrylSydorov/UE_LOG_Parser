@@ -1,0 +1,10 @@
+[package]
+name = "UnrealLogParser"
+description = "A simple log parser for Unreal Engine logs, which can be used to extract useful information from logs."
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+clap = "4.5.21"
+anyhow = "1.0.93"
