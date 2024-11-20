@@ -1,8 +1,8 @@
 // Kyryl Sydorov, 2024
 
-use std::io::Write;
 use anyhow::Result;
-use clap::{Command, Arg, ArgMatches};
+use clap::{Arg, ArgMatches, Command};
+use std::io::Write;
 use unreal_log_parser::*;
 
 const APP_NAME: &str = "Unreal Engine Log Parser";
@@ -22,14 +22,10 @@ const COMMAND_PARSE_OUTPUT: &str = "output";
 const COMMAND_PARSE_VERBOSITY: &str = "verbosity";
 const COMMAND_PARSE_CATEGORY: &str = "category";
 
-
 fn main() -> Result<()> {
     let matches = Command::new(APP_NAME)
         .version(APP_VERSION)
-        .subcommand(
-            Command::new(COMMAND_CREDITS)
-                .about(COMMAND_CREDITS_INFO)
-        )
+        .subcommand(Command::new(COMMAND_CREDITS).about(COMMAND_CREDITS_INFO))
         .subcommand(
             Command::new(COMMAND_PARSE)
                 .about(COMMAND_PARSE_INFO)
@@ -48,14 +44,16 @@ fn main() -> Result<()> {
                 .arg(
                     Arg::new(COMMAND_PARSE_VERBOSITY)
                         .short('v')
-                        .help("Verbosity level to include\n\
+                        .help(
+                            "Verbosity level to include\n\
                             \tFatal\n\
                             \tError\n\
                             \tWarning\n\
                             \tDisplay\n\
                             \tLog\n\
                             \tVerbose\n\
-                            \tVeryVerbose\n")
+                            \tVeryVerbose\n",
+                        )
                         .required(false),
                 )
                 .arg(
@@ -63,23 +61,25 @@ fn main() -> Result<()> {
                         .short('c')
                         .help("Look for logs with a specific category")
                         .required(false),
-                )
+                ),
         )
         .get_matches();
 
     match matches.subcommand() {
         Some((COMMAND_CREDITS, _)) => {
             print_credits();
-        },
+        }
         Some((COMMAND_PARSE, parse_matches)) => {
             process(parse_matches)?;
-        },
+        }
         _ => {
             println!("Unknown command!");
-            println!("Use \"{} {}\" to see the list of available commands", APP_SHORT_NAME, COMMAND_HELP);
+            println!(
+                "Use \"{} {}\" to see the list of available commands",
+                APP_SHORT_NAME, COMMAND_HELP
+            );
         }
     }
-
 
     Ok(())
 }
@@ -103,7 +103,7 @@ fn process(matches: &ArgMatches) -> Result<()> {
     match parse_result {
         Ok(_) => {
             println!("Parsed successfully!");
-        },
+        }
         Err(e) => {
             println!("Error: {}", e);
         }

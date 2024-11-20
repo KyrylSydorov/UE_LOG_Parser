@@ -1,4 +1,4 @@
-﻿// Kyryl Sydorov, 2024
+// Kyryl Sydorov, 2024
 
 pub use pest::Parser;
 use pest_derive::Parser;
@@ -65,20 +65,21 @@ impl fmt::Display for Verbosity {
 
 impl fmt::Display for Timestamp {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Date: {:04}.{:02}.{:02} Time: {:02}.{:02}.{:02} {:03}ms",
-               self.year, self.month, self.day,
-               self.hour, self.minute, self.second, self.millisecond)
+        write!(
+            f,
+            "Date: {:04}.{:02}.{:02} Time: {:02}.{:02}.{:02} {:03}ms",
+            self.year, self.month, self.day, self.hour, self.minute, self.second, self.millisecond
+        )
     }
 }
 
 impl fmt::Display for LogEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Timestamp: {} \nFrame: {} \nCategory: {} \nVerbosity: {} \nMessage: {}",
-               self.timestamp,
-               self.frame_num,
-               self.category,
-               self.verbosity,
-               self.message)
+        write!(
+            f,
+            "Timestamp: {} \nFrame: {} \nCategory: {} \nVerbosity: {} \nMessage: {}",
+            self.timestamp, self.frame_num, self.category, self.verbosity, self.message
+        )
     }
 }
 
@@ -97,7 +98,7 @@ impl Verbosity {
     }
 }
 
-use pest::iterators::{Pair};
+use pest::iterators::Pair;
 
 #[derive(Debug, Error, PartialEq)]
 pub enum UnrealLogParserError {
@@ -119,10 +120,14 @@ pub enum UnrealLogParserError {
 
 impl LogEntry {
     pub fn parse(input: &str) -> Result<LogEntry, UnrealLogParserError> {
-        let mut pairs = UnrealLogParser::parse(Rule::line, input).map_err(|_| UnrealLogParserError::ParseError)?;
-        let inner = pairs.next().ok_or(UnrealLogParserError::NoLogEntriesFound)?.into_inner();
+        let mut pairs = UnrealLogParser::parse(Rule::line, input)
+            .map_err(|_| UnrealLogParserError::ParseError)?;
+        let inner = pairs
+            .next()
+            .ok_or(UnrealLogParserError::NoLogEntriesFound)?
+            .into_inner();
 
-        let mut result : LogEntry = LogEntry::new();
+        let mut result: LogEntry = LogEntry::new();
 
         for pair in inner {
             match pair.as_rule() {
@@ -130,17 +135,28 @@ impl LogEntry {
                     result.timestamp = Timestamp::from_pair(pair)?;
                 }
                 Rule::frame_num => {
-                    let frame_pair = pair.into_inner().next().ok_or(UnrealLogParserError::InvalidFrameNumber)?;
+                    let frame_pair = pair
+                        .into_inner()
+                        .next()
+                        .ok_or(UnrealLogParserError::InvalidFrameNumber)?;
                     let frame_num_str = frame_pair.as_str().replace(" ", "");
-                    let frame_num = frame_num_str.parse::<u32>().map_err(|_| UnrealLogParserError::InvalidFrameNumber)?;
+                    let frame_num = frame_num_str
+                        .parse::<u32>()
+                        .map_err(|_| UnrealLogParserError::InvalidFrameNumber)?;
                     result.frame_num = frame_num;
                 }
                 Rule::category => {
-                    let category_pair = pair.into_inner().next().ok_or(UnrealLogParserError::InvalidCategory)?;
+                    let category_pair = pair
+                        .into_inner()
+                        .next()
+                        .ok_or(UnrealLogParserError::InvalidCategory)?;
                     result.category = category_pair.as_str().to_string();
                 }
                 Rule::verbosity => {
-                    let verbosity_pair = pair.into_inner().next().ok_or(UnrealLogParserError::InvalidVerbosity)?;
+                    let verbosity_pair = pair
+                        .into_inner()
+                        .next()
+                        .ok_or(UnrealLogParserError::InvalidVerbosity)?;
                     result.verbosity = Verbosity::from_str(verbosity_pair.as_str())?;
                 }
                 Rule::message => {
@@ -168,22 +184,54 @@ impl LogEntry {
 
 impl Timestamp {
     fn from_pair(pair: Pair<Rule>) -> Result<Timestamp, UnrealLogParserError> {
-        let mut inner = pair.into_inner().next().ok_or(UnrealLogParserError::InvalidTimestamp)?.into_inner();
+        let mut inner = pair
+            .into_inner()
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .into_inner();
 
-        let year = inner.next().ok_or(UnrealLogParserError::InvalidTimestamp)?
-            .as_str().parse::<u32>().map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
-        let month = inner.next().ok_or(UnrealLogParserError::InvalidTimestamp)?
-            .as_str().parse::<u32>().map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
-        let day = inner.next().ok_or(UnrealLogParserError::InvalidTimestamp)?
-            .as_str().parse::<u32>().map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
-        let hour = inner.next().ok_or(UnrealLogParserError::InvalidTimestamp)?
-            .as_str().parse::<u32>().map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
-        let minute = inner.next().ok_or(UnrealLogParserError::InvalidTimestamp)?
-            .as_str().parse::<u32>().map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
-        let second = inner.next().ok_or(UnrealLogParserError::InvalidTimestamp)?
-            .as_str().parse::<u32>().map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
-        let millisecond = inner.next().ok_or(UnrealLogParserError::InvalidTimestamp)?
-            .as_str().parse::<u32>().map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
+        let year = inner
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .as_str()
+            .parse::<u32>()
+            .map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
+        let month = inner
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .as_str()
+            .parse::<u32>()
+            .map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
+        let day = inner
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .as_str()
+            .parse::<u32>()
+            .map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
+        let hour = inner
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .as_str()
+            .parse::<u32>()
+            .map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
+        let minute = inner
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .as_str()
+            .parse::<u32>()
+            .map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
+        let second = inner
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .as_str()
+            .parse::<u32>()
+            .map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
+        let millisecond = inner
+            .next()
+            .ok_or(UnrealLogParserError::InvalidTimestamp)?
+            .as_str()
+            .parse::<u32>()
+            .map_err(|_| UnrealLogParserError::InvalidTimestamp)?;
         Ok(Timestamp {
             year,
             month,
@@ -222,7 +270,8 @@ impl LogFile {
     }
 
     pub fn parse(&mut self) -> Result<(), UnrealLogParserError> {
-        let contents = std::fs::read_to_string(&self.path).map_err(|_| UnrealLogParserError::NoSuchFile)?;
+        let contents =
+            std::fs::read_to_string(&self.path).map_err(|_| UnrealLogParserError::NoSuchFile)?;
         let lines = contents.lines();
 
         match lines.count() {
@@ -232,12 +281,15 @@ impl LogFile {
                     let entry = LogEntry::parse(line);
 
                     match entry {
-                        Ok(_) => { self.entries.push(entry?); }
-                        Err(_) => { println!("Error parsing line: {}", line); }
+                        Ok(_) => {
+                            self.entries.push(entry?);
+                        }
+                        Err(_) => {
+                            println!("Error parsing line: {}", line);
+                        }
                     }
-
                 }
-            },
+            }
         }
 
         if self.entries.len() == 0 {
