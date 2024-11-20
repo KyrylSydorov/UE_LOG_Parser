@@ -1,0 +1,24 @@
+ws = _{ " " }
+
+line = { timestamp? ~ frame_num? ~ category ~ verbosity? ~ message ~ NEWLINE? }
+
+timestamp = { "[" ~ datetime ~ "]" }
+datetime = { year ~ "." ~ month ~ "." ~ day ~ "-" ~ hour ~ "." ~ minute ~ "." ~ second ~ ":" ~ millisecond }
+year = @{ ASCII_DIGIT{4} }
+month = @{ ASCII_DIGIT{2} }
+day = @{ ASCII_DIGIT{2} }
+hour = @{ ASCII_DIGIT{2} }
+minute = @{ ASCII_DIGIT{2} }
+second = @{ ASCII_DIGIT{2} }
+millisecond = @{ ASCII_DIGIT{3} }
+
+frame_num = { "[" ~ frame_number ~ "]" }
+frame_number = @{ ws? ~ ws? ~ ASCII_DIGIT+ }
+
+category = { identifier ~ ":" ~ ws }
+verbosity = { verbosity_str ~ ":" ~ ws }
+verbosity_str = { "Verbose" | "VeryVerbose" | "Display" | "Log" | "Warning" | "Error" | "Fatal" }
+
+message = { (!NEWLINE ~ ANY)* }
+
+identifier = @{ (ASCII_ALPHANUMERIC | "_" | "/")+ }
