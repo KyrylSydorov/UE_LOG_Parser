@@ -7,7 +7,7 @@ use unreal_log_parser::*;
 
 const APP_NAME: &str = "Unreal Engine Log Parser";
 const APP_SHORT_NAME: &str = "unreal_log_parser";
-const APP_VERSION: &str = "1.0.0";
+const APP_VERSION: &str = "1.1.0";
 
 const COMMAND_HELP: &str = "help";
 
