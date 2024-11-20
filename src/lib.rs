@@ -1,5 +1,7 @@
 // Kyryl Sydorov, 2024
 
+#![doc = include_str!("../docs.md")]
+
 pub use pest::Parser;
 use pest_derive::Parser;
 use std::fmt;
