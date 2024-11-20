@@ -4,6 +4,10 @@ description = "A simple log parser for Unreal Engine logs, which can be used to 
 version = "1.0.0"
 edition = "2021"
 license = "MIT"
+repository = "https://github.com/KyrylSydorov/UE_LOG_Parser"
+keywords = ["unreal-engine", "log-parser", "log", "parser", "ue5"]
+categories = ["development-tools"]
+authors = ["Kyryl Sydorov"]
 
 [dependencies]
 clap = "4.5.21"
