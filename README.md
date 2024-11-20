@@ -4,6 +4,8 @@
 
 https://crates.io/crates/unreal_log_parser
 
+https://docs.rs/unreal_log_parser/latest/unreal_log_parser/
+
 ## Features
 
 - **Parse Unreal Engine Logs:** Extracts structured information from log files, including timestamps, frame numbers, categories, verbosity levels, and messages.
