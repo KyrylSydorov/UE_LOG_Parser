@@ -9,6 +9,8 @@ use thiserror::Error;
 #[grammar = "grammar.pest"]
 struct UnrealLogParser;
 
+/// Example log:
+/// [2024.04.27-12.34.56:789][  1]LogTemp: Warning: This is a warning message.
 #[derive(Debug, PartialEq)]
 pub struct LogEntry {
     pub timestamp: Timestamp,
@@ -18,6 +20,8 @@ pub struct LogEntry {
     pub message: String,
 }
 
+/// Example timestamp:
+/// [2024.04.27-12.34.56:789]
 #[derive(Debug, PartialEq)]
 pub struct Timestamp {
     pub year: u32,
@@ -292,7 +296,7 @@ impl LogFile {
             }
         }
 
-        if self.entries.len() == 0 {
+        if self.entries.is_empty() {
             return Err(UnrealLogParserError::NoLogEntriesFound);
         }
 
