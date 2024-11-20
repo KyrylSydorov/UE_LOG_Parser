@@ -2,6 +2,8 @@
 
 **Unreal Engine Log Parser** is a Rust-based command-line tool designed to parse and filter Unreal Engine log files. It leverages the `pest` parser for efficient log parsing and `clap` for a user-friendly CLI interface.
 
+https://crates.io/crates/unreal_log_parser
+
 ## Features
 
 - **Parse Unreal Engine Logs:** Extracts structured information from log files, including timestamps, frame numbers, categories, verbosity levels, and messages.
